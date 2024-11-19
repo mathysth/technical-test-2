@@ -11,11 +11,18 @@ import { IoIosInformationCircleOutline } from "react-icons/io";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import api from "../../services/api";
 import { formatDate } from "../../utils";
+import { FilterStatus } from "../user/list";
+
 const ProjectList = () => {
   const [projects, setProjects] = useState(null);
   const [activeProjects, setActiveProjects] = useState(null);
-
+  const [filter, setFilter] = useState({ status: "active", search: "" });
   const history = useHistory();
+
+  useEffect(() => {
+    if (!projects) return;
+    setActiveProjects(projects.filter((u) => !filter?.status || u.status === filter?.status));
+  }, [projects, filter]);
 
   useEffect(() => {
     (async () => {
@@ -48,6 +55,7 @@ const ProjectList = () => {
   return (
     <div className="w-full p-2 md:!px-8">
       <Create onChangeSearch={handleSearch} />
+      <FilterStatus filter={filter} setFilter={setFilter} />
       <div className="py-3">
         {projectToBeClosedSoon.length > 0 && (
           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4 rounded-md">

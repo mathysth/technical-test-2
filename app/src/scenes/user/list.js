@@ -186,7 +186,7 @@ const SelectAvailability = ({ filter, setFilter }) => {
   );
 };
 
-const FilterStatus = ({ filter, setFilter }) => {
+export const FilterStatus = ({ filter, setFilter }) => {
   return (
     <div className="flex">
       <select
