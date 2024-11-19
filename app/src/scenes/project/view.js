@@ -1,8 +1,6 @@
 import { Chart as ChartJS, registerables } from "chart.js";
 import React, { useEffect, useState } from "react";
-import { IoIosAt, IoIosLink, IoIosStats, IoLogoGithub } from "react-icons/io";
-import { RiRoadMapLine } from "react-icons/ri";
-import { useSelector } from "react-redux";
+import { IoIosAt, IoIosLink } from "react-icons/io";
 import { useHistory, useParams } from "react-router-dom";
 
 import { getDaysInMonth } from "./utils";
@@ -11,6 +9,7 @@ import Loader from "../../components/loader";
 import api from "../../services/api";
 
 import ProgressBar from "../../components/ProgressBar";
+import { formatDate } from "../../utils";
 import SelectMonth from "./../../components/selectMonth";
 
 ChartJS.register(...registerables);
@@ -61,6 +60,7 @@ export default function ProjectView() {
 
 const ProjectDetails = ({ project }) => {
   console.log(project);
+  const dueDate = formatDate(project.dueDate);
   return (
     <div>
       <div className="flex flex-wrap p-3">
@@ -83,6 +83,11 @@ const ProjectDetails = ({ project }) => {
                 <div className="mt-4 text-[18px] text-[#000000] font-semibold">
                   {`Objective :`} <span className="text-[#676D7C] text-[16px] font-medium">{project.objective ? project.objective : ""}</span>
                 </div>
+                {project.dueDate && (
+                  <div className="mt-4 text-[18px] text-[#000000] font-semibold">
+                    {`Due date :`} <span className="text-[#676D7C] text-[16px] font-bold">{project.dueDate ? dueDate : ""}</span>
+                  </div>
+                )}
                 <div className="mt-2 mr-2">
                   <span className="text-[18px] font-semibold text-[#000000]">Budget consummed {project.paymentCycle === "MONTHLY" && "this month"}:</span>
 
@@ -274,7 +279,7 @@ const Links = ({ project }) => {
         </div>
       )}
       {project.links?.map((link) => (
-        <div className="group text-sm font-medium	text-blue-700 border-[1px] border-blue-700 rounded-full overflow-hidden">
+        <div key={link._id} className="group text-sm font-medium	text-blue-700 border-[1px] border-blue-700 rounded-full overflow-hidden">
           <a target="blank" href={link.url} className="break-words cursor-pointer text-blue-700 hover:text-white hover:bg-blue-700 flex hover:no-underline h-full">
             <div className="flex items-center bg-blue-700 py-1 px-2 rounded-r-full ">
               <IoIosLink className="group-hover:scale-110 text-white" />

@@ -4,6 +4,8 @@
   "scripts": {
     "dev": "webpack serve --port 8082 --mode development --config webpack.dev.config.js --progress --liveReload --open --hot --inline",
     "start": "npm run build && node server/index.js",
+    "lint": "eslint . --ext .js,.jsx",
+    "format": "eslint . --ext .js,.jsx --fix",
     "build": "webpack"
   },
   "devDependencies": {
@@ -24,9 +26,9 @@
     "copy-webpack-plugin": "10.2.0",
     "css-loader": "5.2.7",
     "eslint": "8.7.0",
-    "eslint-config-prettier": "8.3.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "2.25.4",
-    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "7.28.0",
     "eslint-plugin-react-hooks": "4.3.0",
     "file-loader": "6.2.0",

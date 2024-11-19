@@ -1,4 +1,5 @@
 import React from "react";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 import { ActivitiesIcon, HomeIcon, PeopleIcon, ProjectsIcon } from "../assets/Icons";
 
@@ -7,10 +8,11 @@ const Drawer = () => {
 };
 
 const DrawerDesktop = () => {
+  const [open, setOpen] = React.useState(true);
   return (
     <div className="flex-shrink-0 overflow-y-auto">
       <ul className={`list-none px-3 z-10 border-r border-[#a0a6b124] space-y-2 translate-x-0 duration-200`}>
-        <Section title="Général">
+        <Section title="Général" setOpen={setOpen} open={open}>
           <Link to="/" title="Home" Icon={HomeIcon} />
           <Link to="/project" title="Projects" Icon={ProjectsIcon} />
           <Link to="/activity" title="Activities" Icon={ActivitiesIcon} />
@@ -40,16 +42,16 @@ const Link = ({ Icon, title, to, onClick = () => {} }) => {
   );
 };
 
-const Section = ({ children, title }) => {
+const Section = ({ children, title, setOpen, open }) => {
   return (
     <div>
       <h1
         className="flex gap-1 items-center uppercase text-[10px] text-gray-400 tracking-wide font-semibold mt-4 cursor-pointer hover:underline mb-2"
         onClick={() => setOpen((o) => !o)}>
         {title}
+        {open ? <IoIosArrowUp /> : <IoIosArrowDown />}
       </h1>
-
-      {children}
+      {open && children}
     </div>
   );
 };

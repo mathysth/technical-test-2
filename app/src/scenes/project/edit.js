@@ -104,6 +104,16 @@ export default function EditProject() {
                         <option value="ONE_TIME">One time</option>
                       </select>
                     </div>
+                    <div className="w-full md:w-[260px] ">
+                      <div className="text-[14px] text-[#212325] font-medium	">Due date</div>
+                      <input
+                        type="date"
+                        className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]"
+                        name="dueDate"
+                        value={new Date(values.dueDate).toISOString().split("T")[0]}
+                        onChange={handleChange}
+                      />
+                    </div>
                   </div>
 
                   <div className="w-full mt-3">
@@ -139,7 +149,7 @@ export default function EditProject() {
                     <div className="text-[14px] text-[#212325] font-medium	">Autres</div>
                     {(values.links || []).map((link) => {
                       return (
-                        <div className="flex flex-1 flex-row mt-2 items-center gap-1">
+                        <div className="flex flex-1 flex-row mt-2 items-center gap-1" key={link._id}>
                           <div className="flex gap-1 flex-1 items-center">
                             <input
                               className="projectsInput mt-0 text-[14px] font-normal text-[#212325] rounded-[10px]"

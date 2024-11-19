@@ -7,7 +7,10 @@ import Loader from "../../components/loader";
 import LoadingButton from "../../components/loadingButton";
 import ProgressBar from "../../components/ProgressBar";
 
+import { IoIosInformationCircleOutline } from "react-icons/io";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import api from "../../services/api";
+import { formatDate } from "../../utils";
 const ProjectList = () => {
   const [projects, setProjects] = useState(null);
   const [activeProjects, setActiveProjects] = useState(null);
@@ -33,10 +36,43 @@ const ProjectList = () => {
     setActiveProjects(p);
   };
 
+  const projectToBeClosedSoon = activeProjects.filter((p) => {
+    if (!p.dueDate) return false;
+    const dueDate = new Date(p.dueDate);
+    const today = new Date();
+    const threeMonthsFromNow = new Date();
+    threeMonthsFromNow.setMonth(today.getMonth() + 3);
+    return dueDate > today && dueDate <= threeMonthsFromNow;
+  });
+
   return (
     <div className="w-full p-2 md:!px-8">
       <Create onChangeSearch={handleSearch} />
       <div className="py-3">
+        {projectToBeClosedSoon.length > 0 && (
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4 rounded-md">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <IoIosInformationCircleOutline className="text-blue-500" />
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-blue-700">
+                  {projectToBeClosedSoon.length} {projectToBeClosedSoon.length === 1 ? "project is" : "projects are"} due in the next 3 months
+                </p>
+                <div className="mt-2">
+                  {projectToBeClosedSoon.map((project) => (
+                    <Link key={project._id} to={`/project/${project._id}`}>
+                      <div className="text-sm text-blue-600 hover:underline cursor-pointer">
+                        • {project.name} - {formatDate(project.dueDate)}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeProjects.map((hit) => {
           return (
             <div
@@ -57,6 +93,12 @@ const ProjectList = () => {
               <div className="w-full md:w-[25%]  px-[10px]">
                 <span className="text-[16px] font-medium text-[#212325]">Budget consumed {hit.paymentCycle === "MONTHLY" && "this month"}:</span>
                 <Budget project={hit} />
+                {hit.dueDate && (
+                  <>
+                    <span className="text-[16px] font-medium text-[#212325]">Due Date:</span>
+                    <div className="mt-2 text-[24px] text-[#212325] font-semibold">{formatDate(hit.dueDate)}</div>
+                  </>
+                )}
               </div>
             </div>
           );
@@ -155,9 +197,21 @@ const Create = ({ onChangeSearch }) => {
               {({ values, handleChange, handleSubmit, isSubmitting }) => (
                 <React.Fragment>
                   <div className="w-full md:w-6/12 text-left">
-                    <div>
-                      <div className="text-[14px] text-[#212325] font-medium	">Name</div>
-                      <input className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]" name="name" value={values.name} onChange={handleChange} />
+                    <div className="flex space-x-4">
+                      <div>
+                        <div className="text-[14px] text-[#212325] font-medium	">Name</div>
+                        <input className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]" name="name" value={values.name} onChange={handleChange} />
+                      </div>
+                      <div>
+                        <div className="text-[14px] text-[#212325] font-medium	">Due Date</div>
+                        <input
+                          className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]"
+                          type="date"
+                          name="dueDate"
+                          value={values.dueDate}
+                          onChange={handleChange}
+                        />
+                      </div>
                     </div>
                     <LoadingButton
                       className="mt-[1rem] bg-[#0560FD] text-[16px] font-medium text-[#FFFFFF] py-[12px] px-[22px] rounded-[10px]"

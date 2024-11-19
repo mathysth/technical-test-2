@@ -39,7 +39,7 @@ const Activity = () => {
           onChange={(e) => setProject(e.name)}
           className="w-[180px] bg-[#FFFFFF] text-[#212325] py-[10px] px-[14px] rounded-[10px] border-r-[16px] border-[transparent] cursor-pointer shadow-sm font-normal text-[14px]"
         />
-        <SelectMonth start={-3} indexDefaultValue={3} value={date} onChange={(e) => setDate(e.target.value)} showArrows />
+        <SelectMonth start={-3} indexDefaultValue={3} value={date ?? ""} onChange={(e) => setDate(e.target.value)} showArrows />
       </div>
       {date && user && <Activities date={new Date(date)} user={user} project={project} />}
     </div>
@@ -175,7 +175,7 @@ const Activities = ({ date, user, project }) => {
                   </tr>
                   {activities.map((e, i) => {
                     return (
-                      <React.Fragment key={e.project}>
+                      <React.Fragment key={e._id}>
                         <tr className="border-t border-b border-r border-[#E5EAEF]" key={`1-${e._id}`} onClick={() => setOpen(i)}>
                           <th className="w-[100px] border-t border-b border-r text-[12px] font-bold text-[#212325] text-left">
                             <div className="flex flex-1 items-center justify-between gap-1 px-2">
@@ -190,7 +190,7 @@ const Activities = ({ date, user, project }) => {
                           </th>
                           {e.detail.map((f, j) => {
                             return (
-                              <Field key={`${e.project} ${j}`} invoiced={e.invoiced} value={f.value || 0} onChange={(a) => onUpdateValue(i, j, parseFloat(a.target.value || 0))} />
+                              <Field key={`${e._id}-${j}`} invoiced={e.invoiced} value={f.value || 0} onChange={(a) => onUpdateValue(i, j, parseFloat(a.target.value || 0))} />
                             );
                           })}
                           <th className={`border border-[#E5EAEF] py-[6px]`}>

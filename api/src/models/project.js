@@ -13,7 +13,7 @@ const Schema = new mongoose.Schema({
   type: { type: String, enum: ["prospection", "startup-project", "startup-invest", "admin"] },
 
   paymentCycle: { type: String, enum: ["MONTHLY", "ONE_TIME"], default: "MONTHLY" },
-
+  dueDate: { type: Date },
   organisation: { type: String, trim: true },
   logo: { type: String, default: "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" },
   background: { type: String, default: "" },
